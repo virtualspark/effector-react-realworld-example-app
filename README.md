@@ -67,3 +67,88 @@ The example application is a social blogging site (i.e. a Medium.com clone) call
 <br />
 
 [![Brought to you by Thinkster](https://raw.githubusercontent.com/gothinkster/realworld/master/media/end.png)](https://thinkster.io)
+
+# Running application via npm on local machine
+- To install all packages from package.json: 
+  `npm install --legacy-peer-deps`
+- To start the web server: 
+  `npm start`
+
+# Running application via docker
+- To build the docker image for our application: 
+  `docker build --no-cache -t  realworld-app .`
+- To run the docker container:
+  `docker run --name realworld-app -d -p 4100:4100 realworld-app:latest`
+- To find docker desktop ip address: 
+  `C:\Windows\System32\drivers\etc\hosts`
+- To view the application on browser: 
+  `http://192.168.1.20:4100/`
+
+# Running application via docker  compose
+- To run the docker-compose.yml: 
+  `docker-compose up`
+
+# Converting docker-compose file to kubernetes 
+- To download Kompose:
+  `curl -L https://github.com/kubernetes/kompose/releases/download/v1.24.0/kompose-windows-amd64.exe -o kompose.exe`
+- To convert docker-compose file to kubernetes resources automatically:
+  `Kompose convert`
+
+# Minikube
+- To start minikube: 
+  `minikube start`
+
+# Kubernetes
+https://medium.com/swlh/how-to-run-locally-built-docker-images-in-kubernetes-b28fbc32cc1d
+
+- To switch docker images regisrty to minikube registry: 
+  `minikube docker-env`
+  `@FOR /f "tokens=*" %i IN ('minikube -p minikube docker-env') DO @%i`
+
+- Now build image again: 
+  `docker build --no-cache -t  realworld-app .`
+
+- To create kubernetes deployment: 
+  `kubectl apply -f web-deployment.yaml`
+- To create kubernetes service: 
+  `kubectl apply -f web-service.yaml`
+- To reach the service: 
+  `minikube service realworld-app` 
+
+# Helm
+- To create Helm Chart
+  `helm create realworld-app`
+
+- Verify YAML files generated
+  `tree realworld-app`
+
+- Update chart.yaml
+  set 
+    appVersion: "latest"
+
+- Update deployment.yaml
+  set 
+    containerPort : 4100
+
+- Update values.yaml
+  set 
+    repository: realworld-app
+  set 
+    type: NodePort
+    port: 4100  
+
+- Verify Conversion of YAMLs
+  `helm template realworld-app`
+
+- To find any syntactical errors  
+  `helm lint realworld-app`
+
+- To Run/Install Helm Chart
+  `helm install realworld-app-installation realworld-app`
+
+- To upgrade Helm Chart
+  `helm upgrade realworld-app-installation realworld-app`
+
+- To uninstall Helm Chart
+  `helm uninstall realworld-app-installation realworld-app`
+
